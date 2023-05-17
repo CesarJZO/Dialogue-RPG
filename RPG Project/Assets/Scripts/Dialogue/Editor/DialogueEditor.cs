@@ -1,7 +1,5 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.Callbacks;
-using UnityEngine;
 
 namespace RPG.Dialogue.Editor
 {
@@ -26,9 +24,7 @@ namespace RPG.Dialogue.Editor
         {
             _selectedDialogueAsset = EditorUtility.InstanceIDToObject(instanceID) as Dialogue;
             if (!_selectedDialogueAsset) return false;
-
             ShowWindow();
-
             return true;
         }
 
@@ -57,7 +53,8 @@ namespace RPG.Dialogue.Editor
 
         private void OnSelectionChanged()
         {
-
+            _selectedDialogueAsset = Selection.activeObject as Dialogue;
+            Repaint();
         }
     }
 }
