@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Dialogue
+namespace RPG.Dialogue
 {
     [Serializable]
     public class DialogueNode
