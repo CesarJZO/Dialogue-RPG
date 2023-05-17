@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
   nodes:
-  - id: Hola
-    text: Ima text, look a tme!
-    children: []
-  - id: 
-    text: 
-    children: []
-  - id: 
-    text: 
-    children: []
+  - id: a
+    text: Hello
+    children: 
+  - id: b
+    text: Hello, yourself.
+    children: 
+  - id: c
+    text: Go away, please!
+    children: 
+  - id: d
+    text: Yes
+    children: 

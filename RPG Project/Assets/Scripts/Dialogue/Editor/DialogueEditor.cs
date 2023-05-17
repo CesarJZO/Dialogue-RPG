@@ -45,7 +45,8 @@ namespace RPG.Dialogue.Editor
 
             foreach (DialogueNode node in _selectedDialogueAsset)
             {
-                EditorGUILayout.LabelField(node.text);
+                EditorGUILayout.LabelField($"Node {node.id}");
+                node.text = EditorGUILayout.TextArea(node.text);
             }
         }
 
