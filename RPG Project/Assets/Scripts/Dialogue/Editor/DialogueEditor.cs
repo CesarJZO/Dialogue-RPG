@@ -7,10 +7,17 @@ namespace RPG.Dialogue.Editor
     {
         private static Dialogue _selectedDialogueAsset;
 
+        /// <summary>
+        /// Opens the Dialogue Editor window when the menu item is clicked.
+        /// </summary>
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowWindow()
         {
-            var window = GetWindow<DialogueEditor>("Dialogue Editor", focus: true, typeof(SceneView));
+            var window = GetWindow<DialogueEditor>(
+                title: "Dialogue Editor",
+                focus: true,
+                desiredDockNextTo: typeof(SceneView)
+            );
         }
 
         /// <summary>
@@ -36,9 +43,16 @@ namespace RPG.Dialogue.Editor
                 return;
             }
 
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField(_selectedDialogueAsset.name);
-            EditorGUILayout.EndVertical();
+            foreach (DialogueNode node in _selectedDialogueAsset)
+            {
+                EditorGUILayout.LabelField(node.text);
+            }
+        }
+
+        private void OnSelectionChanged()
+        {
+            _selectedDialogueAsset = Selection.activeObject as Dialogue;
+            Repaint();
         }
 
         private void OnEnable()
@@ -49,12 +63,6 @@ namespace RPG.Dialogue.Editor
         private void OnDisable()
         {
             Selection.selectionChanged -= OnSelectionChanged;
-        }
-
-        private void OnSelectionChanged()
-        {
-            _selectedDialogueAsset = Selection.activeObject as Dialogue;
-            Repaint();
         }
     }
 }
