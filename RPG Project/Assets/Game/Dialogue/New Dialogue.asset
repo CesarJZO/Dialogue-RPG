@@ -20,7 +20,17 @@ MonoBehaviour:
     text: Hello, yourself.
     children: 
   - id: c
-    text: Go away, please!
+    text: 'Go away, hdgwahgdwa
+
+      wkdhjgwkjdg
+
+      wduhwdwhdlkajdh
+
+      wlljdhwakdjhwadkj
+
+      dwkdkjawdkjb
+
+      dojwdkjdb'
     children: 
   - id: d
     text: Yes

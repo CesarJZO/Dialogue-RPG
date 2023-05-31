@@ -13,7 +13,7 @@ namespace RPG.Dialogue.Editor
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowWindow()
         {
-            var window = GetWindow<DialogueEditor>(
+            GetWindow<DialogueEditor>(
                 title: "Dialogue Editor",
                 focus: true,
                 desiredDockNextTo: typeof(SceneView)
@@ -46,7 +46,17 @@ namespace RPG.Dialogue.Editor
             foreach (DialogueNode node in _selectedDialogueAsset)
             {
                 EditorGUILayout.LabelField($"Node {node.id}");
-                node.text = EditorGUILayout.TextArea(node.text);
+                EditorGUI.BeginChangeCheck();
+                string newId = EditorGUILayout.TextField(node.id);
+                string newText = EditorGUILayout.TextArea(node.text);
+
+                EditorGUILayout.Space();
+
+                if (!EditorGUI.EndChangeCheck()) continue;
+
+                Undo.RecordObject(_selectedDialogueAsset, "Update Dialogue");
+                node.text = newText;
+                node.id = newId;
             }
         }
 
