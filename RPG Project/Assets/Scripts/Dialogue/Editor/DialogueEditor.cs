@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ namespace RPG.Dialogue.Editor
 
         private GUIStyle _nodeStyle;
 
-        private bool _dragging;
+        private DialogueNode _draggingNode;
+        private Vector2 _draggingOffset;
 
         /// <summary>
         /// Opens the Dialogue Editor window when the menu item is clicked.
@@ -61,22 +63,32 @@ namespace RPG.Dialogue.Editor
         /// </summary>
         private void ProcessEvents()
         {
-            if (Event.current.type == EventType.MouseDown && !_dragging && Event.current.button == 0)
+            if (Event.current.type == EventType.MouseDown && !_draggingNode && Event.current.button == 0)
             {
-                _dragging = true;
-
+                _draggingNode = GetNodeAtPoint(Event.current.mousePosition);
+                if (_draggingNode)
+                    _draggingOffset = Event.current.mousePosition - _draggingNode.rect.position;
             }
-            else if (Event.current.type == EventType.MouseDrag && _dragging)
+            else if (Event.current.type == EventType.MouseDrag && _draggingNode)
             {
                 Undo.RecordObject(_selectedDialogueAsset, "Move Dialogue Node");
-                _selectedDialogueAsset.RootNode.rect.position = Event.current.mousePosition;
+                _draggingNode.rect.position = Event.current.mousePosition - _draggingOffset;
                 GUI.changed = true;
             }
-            else if (Event.current.type == EventType.MouseUp && _dragging && Event.current.button == 0)
+            else if (Event.current.type == EventType.MouseUp && _draggingNode && Event.current.button == 0)
             {
-                _dragging = false;
+                _draggingNode = null;
             }
+        }
 
+        /// <summary>
+        /// Gets the foremost DialogueNode at the given point.
+        /// </summary>
+        /// <param name="currentMousePosition">The point to check</param>
+        /// <returns></returns>
+        private static DialogueNode GetNodeAtPoint(Vector2 currentMousePosition)
+        {
+            return _selectedDialogueAsset.LastOrDefault(node => node.rect.Contains(currentMousePosition));
         }
 
         /// <summary>
