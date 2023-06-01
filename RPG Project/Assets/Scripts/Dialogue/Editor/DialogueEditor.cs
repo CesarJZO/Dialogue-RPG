@@ -8,6 +8,8 @@ namespace RPG.Dialogue.Editor
     {
         private static Dialogue _selectedDialogueAsset;
 
+        private GUIStyle _nodeStyle;
+
         /// <summary>
         /// Opens the Dialogue Editor window when the menu item is clicked.
         /// </summary>
@@ -54,10 +56,10 @@ namespace RPG.Dialogue.Editor
         /// Draws the GUI for a DialogueNode.
         /// </summary>
         /// <param name="node"></param>
-        private static void OnGUINode(DialogueNode node)
+        private void OnGUINode(DialogueNode node)
         {
-            GUILayout.BeginArea(node.rect, GUI.skin.box);
-            EditorGUILayout.LabelField($"Node {node.id}");
+            GUILayout.BeginArea(node.rect, _nodeStyle);
+            EditorGUILayout.LabelField($"Node {node.id}", EditorStyles.boldLabel);
 
             EditorGUI.BeginChangeCheck();
 
@@ -97,6 +99,13 @@ namespace RPG.Dialogue.Editor
         private void OnEnable()
         {
             Selection.selectionChanged += OnSelectionChanged;
+
+            _nodeStyle = new GUIStyle
+            {
+                normal = { background = EditorGUIUtility.Load("node0") as Texture2D },
+                padding = new RectOffset(20, 20, 20, 20),
+                border = new RectOffset(12, 12, 12, 12)
+            };
         }
 
         private void OnDisable()
