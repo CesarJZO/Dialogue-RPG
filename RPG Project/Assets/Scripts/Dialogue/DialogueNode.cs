@@ -7,9 +7,8 @@ namespace RPG.Dialogue
     public class DialogueNode
     {
         public string id;
-
         [TextArea] public string text;
-
         public string children;
+        public Rect rect;
     }
 }

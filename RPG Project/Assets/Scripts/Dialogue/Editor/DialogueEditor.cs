@@ -46,30 +46,42 @@ namespace RPG.Dialogue.Editor
 
             foreach (DialogueNode node in _selectedDialogueAsset)
             {
-                EditorGUILayout.LabelField($"Node {node.id}");
+                OnGUINode(node);
+            }
+        }
 
-                EditorGUI.BeginChangeCheck();
+        /// <summary>
+        /// Draws the GUI for a DialogueNode.
+        /// </summary>
+        /// <param name="node"></param>
+        private static void OnGUINode(DialogueNode node)
+        {
+            GUILayout.BeginArea(node.rect, GUI.skin.box);
+            EditorGUILayout.LabelField($"Node {node.id}");
 
-                string newId = EditorGUILayout.TextField(node.id);
-                string newText = EditorGUILayout.TextArea(node.text);
+            EditorGUI.BeginChangeCheck();
 
-                EditorGUILayout.Space();
+            string newId = EditorGUILayout.TextField(node.id);
+            string newText = EditorGUILayout.TextArea(node.text);
 
-                if (!EditorGUI.EndChangeCheck()) continue;
+            EditorGUILayout.Space();
 
-                // Check whether the newId or new text has changed and depending on that, print a message of what has changed.
+            if (EditorGUI.EndChangeCheck())
+            {
                 string message;
                 if (newId != node.id)
                     message = nameof(node.id);
                 else if (newText != node.text)
                     message = nameof(node.text);
                 else
-                    continue;
+                    return;
                 Undo.RecordObject(_selectedDialogueAsset, $"Update dialogue {message}");
 
                 node.text = newText;
                 node.id = newId;
             }
+
+            GUILayout.EndArea();
         }
 
         private void OnSelectionChanged()
