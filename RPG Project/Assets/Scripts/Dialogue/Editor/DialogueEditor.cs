@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEngine;
 
 namespace RPG.Dialogue.Editor
 {
@@ -46,7 +47,9 @@ namespace RPG.Dialogue.Editor
             foreach (DialogueNode node in _selectedDialogueAsset)
             {
                 EditorGUILayout.LabelField($"Node {node.id}");
+
                 EditorGUI.BeginChangeCheck();
+
                 string newId = EditorGUILayout.TextField(node.id);
                 string newText = EditorGUILayout.TextArea(node.text);
 
@@ -54,7 +57,16 @@ namespace RPG.Dialogue.Editor
 
                 if (!EditorGUI.EndChangeCheck()) continue;
 
-                Undo.RecordObject(_selectedDialogueAsset, "Update Dialogue");
+                // Check whether the newId or new text has changed and depending on that, print a message of what has changed.
+                string message;
+                if (newId != node.id)
+                    message = nameof(node.id);
+                else if (newText != node.text)
+                    message = nameof(node.text);
+                else
+                    continue;
+                Undo.RecordObject(_selectedDialogueAsset, $"Update dialogue {message}");
+
                 node.text = newText;
                 node.id = newId;
             }
@@ -62,7 +74,11 @@ namespace RPG.Dialogue.Editor
 
         private void OnSelectionChanged()
         {
-            _selectedDialogueAsset = Selection.activeObject as Dialogue;
+            var selected = Selection.activeObject as Dialogue;
+
+            if (selected)
+                _selectedDialogueAsset = selected;
+
             Repaint();
         }
 
