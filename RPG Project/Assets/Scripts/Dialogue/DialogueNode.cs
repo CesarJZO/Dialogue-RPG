@@ -9,6 +9,6 @@ namespace RPG.Dialogue
         public string id;
         [TextArea] public string text;
         public string children;
-        public Rect rect;
+        public Rect rect = new Rect(0f, 0f, 200f, 100f);
     }
 }

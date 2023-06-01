@@ -9,6 +9,8 @@ namespace RPG.Dialogue
     {
         [SerializeField] private List<DialogueNode> nodes;
 
+        public DialogueNode RootNode => nodes[0];
+
 #if UNITY_EDITOR
         private void Awake()
         {

@@ -10,6 +10,8 @@ namespace RPG.Dialogue.Editor
 
         private GUIStyle _nodeStyle;
 
+        private bool _dragging;
+
         /// <summary>
         /// Opens the Dialogue Editor window when the menu item is clicked.
         /// </summary>
@@ -46,6 +48,8 @@ namespace RPG.Dialogue.Editor
                 return;
             }
 
+            ProcessEvents();
+
             foreach (DialogueNode node in _selectedDialogueAsset)
             {
                 OnGUINode(node);
@@ -53,9 +57,32 @@ namespace RPG.Dialogue.Editor
         }
 
         /// <summary>
+        /// Processes the mouse events for the Dialogue Editor window.
+        /// </summary>
+        private void ProcessEvents()
+        {
+            if (Event.current.type == EventType.MouseDown && !_dragging && Event.current.button == 0)
+            {
+                _dragging = true;
+
+            }
+            else if (Event.current.type == EventType.MouseDrag && _dragging)
+            {
+                Undo.RecordObject(_selectedDialogueAsset, "Move Dialogue Node");
+                _selectedDialogueAsset.RootNode.rect.position = Event.current.mousePosition;
+                GUI.changed = true;
+            }
+            else if (Event.current.type == EventType.MouseUp && _dragging && Event.current.button == 0)
+            {
+                _dragging = false;
+            }
+
+        }
+
+        /// <summary>
         /// Draws the GUI for a DialogueNode.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="node">The DialogueNode to draw</param>
         private void OnGUINode(DialogueNode node)
         {
             GUILayout.BeginArea(node.rect, _nodeStyle);
