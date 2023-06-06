@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace RPG.Dialogue.Editor
@@ -120,6 +121,11 @@ namespace RPG.Dialogue.Editor
 
                 node.text = newText;
                 node.id = newId;
+            }
+
+            foreach (DialogueNode childNode in _selectedDialogueAsset.GetAllChildren(node))
+            {
+                EditorGUILayout.LabelField(childNode.text);
             }
 
             GUILayout.EndArea();

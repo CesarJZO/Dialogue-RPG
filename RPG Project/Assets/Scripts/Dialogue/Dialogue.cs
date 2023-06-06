@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RPG.Dialogue
@@ -29,6 +30,13 @@ namespace RPG.Dialogue
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public IEnumerable<DialogueNode> GetAllChildren(DialogueNode parentNode)
+        {
+            return from childID in parentNode.children
+                where !string.IsNullOrEmpty(childID)
+                select nodes.FirstOrDefault(node => node.id == childID);
         }
     }
 }
