@@ -42,7 +42,7 @@ namespace RPG.Dialogue
             return GetEnumerator();
         }
 
-        public IEnumerable<DialogueNode> GetAllChildren(DialogueNode parentNode)
+        public IEnumerable<DialogueNode> GetChildren(DialogueNode parentNode)
         {
             // return parentNode.children.Where(id => _nodeLookup.ContainsKey(id)).Select(id => _nodeLookup[id]);
             foreach (string childId in parentNode.children)

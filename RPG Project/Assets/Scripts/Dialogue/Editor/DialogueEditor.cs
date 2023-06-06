@@ -53,9 +53,9 @@ namespace RPG.Dialogue.Editor
             ProcessEvents();
 
             foreach (DialogueNode node in _selectedDialogueAsset)
-            {
-                OnGUINode(node);
-            }
+                DrawConnections(node);
+            foreach (DialogueNode node in _selectedDialogueAsset)
+                DrawNode(node);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace RPG.Dialogue.Editor
         /// Draws the GUI for a DialogueNode.
         /// </summary>
         /// <param name="node">The DialogueNode to draw</param>
-        private void OnGUINode(DialogueNode node)
+        private void DrawNode(DialogueNode node)
         {
             GUILayout.BeginArea(node.rect, _nodeStyle);
             EditorGUILayout.LabelField($"Node {node.id}", EditorStyles.boldLabel);
@@ -103,7 +103,7 @@ namespace RPG.Dialogue.Editor
             EditorGUI.BeginChangeCheck();
 
             string newId = EditorGUILayout.TextField(node.id);
-            string newText = EditorGUILayout.TextArea(node.text);
+            string newText = EditorGUILayout.TextArea(node.text, GUILayout.Height(50f));
 
             EditorGUILayout.Space();
 
@@ -122,10 +122,35 @@ namespace RPG.Dialogue.Editor
                 node.id = newId;
             }
 
-            foreach (DialogueNode childNode in _selectedDialogueAsset.GetAllChildren(node))
-                EditorGUILayout.LabelField(childNode.text, EditorStyles.wordWrappedLabel);
-
             GUILayout.EndArea();
+        }
+
+        private void DrawConnections(DialogueNode node)
+        {
+            Vector3 startPosition = node.rect.center + Vector2.right * node.rect.width / 2f;
+
+            foreach (DialogueNode childNode in _selectedDialogueAsset.GetChildren(node))
+            {
+                var endPosition = new Vector3
+                {
+                    x = childNode.rect.xMin,
+                    y = childNode.rect.center.y
+                };
+
+                Vector3 controlOffset = endPosition - startPosition;
+                controlOffset.y = 0f;
+                controlOffset.x *= 0.8f;
+
+                Handles.DrawBezier(
+                    startPosition: startPosition,
+                    endPosition: endPosition,
+                    startTangent: startPosition + controlOffset,
+                    endTangent: endPosition - controlOffset,
+                    color: Color.white,
+                    texture: null,
+                    width: 4f
+                );
+            }
         }
 
         private void OnSelectionChanged()
