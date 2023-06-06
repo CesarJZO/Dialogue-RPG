@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace RPG.Dialogue.Editor
 {
-    public class DialogueEditor : EditorWindow
+    public sealed class DialogueEditor : EditorWindow
     {
         private static Dialogue _selectedDialogueAsset;
 
@@ -124,9 +123,7 @@ namespace RPG.Dialogue.Editor
             }
 
             foreach (DialogueNode childNode in _selectedDialogueAsset.GetAllChildren(node))
-            {
-                EditorGUILayout.LabelField(childNode.text);
-            }
+                EditorGUILayout.LabelField(childNode.text, EditorStyles.wordWrappedLabel);
 
             GUILayout.EndArea();
         }

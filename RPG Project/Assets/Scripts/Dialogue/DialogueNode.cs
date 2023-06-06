@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RPG.Dialogue
 {
     [Serializable]
-    public class DialogueNode
+    public sealed class DialogueNode
     {
         public string id;
         [TextArea] public string text;
