@@ -58,12 +58,36 @@ namespace RPG.Dialogue
             }
         }
 
+        /// <summary>
+        ///     Creates a new node and adds it to the Dialogue and its parent node.
+        /// </summary>
+        /// <param name="parent">The parent node</param>
         public void CreateNode(DialogueNode parent)
         {
             var newNode = new DialogueNode();
+            newNode.rect.position = parent.rect.position + Vector2.right * 300f + Vector2.down;
             parent.AddChild(newNode.id);
             nodes.Add(newNode);
             OnValidate();
+        }
+
+        /// <summary>
+        ///     Deletes a node and removes it from the Dialogue and its parent node.
+        /// </summary>
+        /// <param name="nodeToDelete">The node to delete</param>
+        public void DeleteNode(DialogueNode nodeToDelete)
+        {
+            nodes.Remove(nodeToDelete);
+            OnValidate();
+            CleanDanglingChildren(nodeToDelete);
+        }
+
+        private void CleanDanglingChildren(DialogueNode nodeToDelete)
+        {
+            foreach (DialogueNode node in nodes)
+            {
+                node.children.Remove(nodeToDelete.id);
+            }
         }
     }
 }

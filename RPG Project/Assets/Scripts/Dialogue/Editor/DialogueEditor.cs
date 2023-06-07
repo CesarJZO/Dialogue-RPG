@@ -11,6 +11,7 @@ namespace RPG.Dialogue.Editor
         private static Dialogue _selectedDialogueAsset;
 
         [NonSerialized] private DialogueNode _creatingNode;
+        [NonSerialized] private DialogueNode _deletingNode;
 
         [NonSerialized] private DialogueNode _draggingNode;
 
@@ -68,6 +69,13 @@ namespace RPG.Dialogue.Editor
                 _selectedDialogueAsset.CreateNode(_creatingNode);
                 _creatingNode = null;
             }
+
+            if (_deletingNode != null)
+            {
+                Undo.RecordObject(_selectedDialogueAsset, "Delete dialogue node");
+                _selectedDialogueAsset.DeleteNode(_deletingNode);
+                _deletingNode = null;
+            }
         }
 
         /// <summary>
@@ -123,8 +131,15 @@ namespace RPG.Dialogue.Editor
                 node.text = newText;
             }
 
-            if (GUILayout.Button("Add node"))
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Add"))
                 _creatingNode = node;
+
+            if (GUILayout.Button("Delete"))
+                _deletingNode = node;
+
+            GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
         }
