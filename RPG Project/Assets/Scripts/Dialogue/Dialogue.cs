@@ -19,7 +19,10 @@ namespace RPG.Dialogue
             nodes ??= new List<DialogueNode>();
 
             if (nodes.Count == 0)
-                nodes.Add(new DialogueNode());
+            {
+                var rootNode = new DialogueNode();
+                nodes.Add(rootNode);
+            }
 #endif
 
             OnValidate();
@@ -28,7 +31,8 @@ namespace RPG.Dialogue
         private void OnValidate()
         {
             _nodeLookup.Clear();
-            foreach (DialogueNode node in this)
+
+            foreach (DialogueNode node in nodes)
                 _nodeLookup[node.id] = node;
         }
 
@@ -45,11 +49,21 @@ namespace RPG.Dialogue
         public IEnumerable<DialogueNode> GetChildren(DialogueNode parentNode)
         {
             // return parentNode.children.Where(id => _nodeLookup.ContainsKey(id)).Select(id => _nodeLookup[id]);
+            if (parentNode.children == null) yield break;
+
             foreach (string childId in parentNode.children)
             {
                 if (_nodeLookup.TryGetValue(childId, out DialogueNode value))
                     yield return value;
             }
+        }
+
+        public void CreateNode(DialogueNode parent)
+        {
+            var newNode = new DialogueNode();
+            parent.AddChild(newNode.id);
+            nodes.Add(newNode);
+            OnValidate();
         }
     }
 }

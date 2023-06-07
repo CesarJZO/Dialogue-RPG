@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Dialogue
@@ -8,9 +9,18 @@ namespace RPG.Dialogue
     {
         public string id;
         [TextArea] public string text;
-        public string[] children;
-        [HideInInspector] public Rect rect = new(0f, 0f, 200f, 100f);
+        public List<string> children;
+        public Rect rect = new(0f, 0f, 200f, 120f);
 
-        public static implicit operator bool(DialogueNode node) => node != null;
+        public DialogueNode()
+        {
+            id = Guid.NewGuid().ToString();
+            children = new List<string>();
+        }
+
+        public void AddChild(string childId)
+        {
+            children.Add(childId);
+        }
     }
 }
