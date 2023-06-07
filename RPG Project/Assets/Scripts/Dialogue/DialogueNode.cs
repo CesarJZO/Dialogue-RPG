@@ -27,9 +27,10 @@ namespace RPG.Dialogue
             children = new List<string>();
         }
 
-        public void AddChild(string childId)
-        {
-            children.Add(childId);
-        }
+        public void AddChild(string childId) => children.Add(childId);
+
+        public void RemoveChild(string childId) => children.Remove(childId);
+
+        public bool HasChild(string childId) => children.Contains(childId);
     }
 }
