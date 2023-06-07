@@ -12,6 +12,7 @@ namespace RPG.Dialogue.Editor
 
         [NonSerialized] private DialogueNode _creatingNode;
         [NonSerialized] private DialogueNode _deletingNode;
+        [NonSerialized] private DialogueNode _linkingParentNode;
 
         [NonSerialized] private DialogueNode _draggingNode;
 
@@ -136,6 +137,8 @@ namespace RPG.Dialogue.Editor
             if (GUILayout.Button("Add"))
                 _creatingNode = node;
 
+            DrawLinkButtons(node);
+
             if (GUILayout.Button("Delete"))
                 _deletingNode = node;
 
@@ -169,6 +172,38 @@ namespace RPG.Dialogue.Editor
                     null,
                     4f
                 );
+            }
+        }
+
+        private void DrawLinkButtons(DialogueNode node)
+        {
+            if (_linkingParentNode == null)
+            {
+                if (GUILayout.Button("Link"))
+                    _linkingParentNode = node;
+            }
+            else if (_linkingParentNode == node)
+            {
+                if (GUILayout.Button("Cancel"))
+                    _linkingParentNode = null;
+            }
+            else if (_linkingParentNode.HasChild(node.id))
+            {
+                if (GUILayout.Button("Unlink"))
+                {
+                    Undo.RecordObject(_selectedDialogueAsset, "Remove dialogue link");
+                    _linkingParentNode.RemoveChild(node.id);
+                    _linkingParentNode = null;
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("Child"))
+                {
+                    Undo.RecordObject(_selectedDialogueAsset, "Add dialogue link");
+                    _linkingParentNode.AddChild(node.id);
+                    _linkingParentNode = null;
+                }
             }
         }
 

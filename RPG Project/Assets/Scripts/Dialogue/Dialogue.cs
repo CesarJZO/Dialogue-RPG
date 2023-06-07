@@ -65,7 +65,7 @@ namespace RPG.Dialogue
         public void CreateNode(DialogueNode parent)
         {
             var newNode = new DialogueNode();
-            newNode.rect.position = parent.rect.position + Vector2.right * 300f + Vector2.down;
+            newNode.rect.position = parent.rect.position + Vector2.right * 250f;
             parent.AddChild(newNode.id);
             nodes.Add(newNode);
             OnValidate();
