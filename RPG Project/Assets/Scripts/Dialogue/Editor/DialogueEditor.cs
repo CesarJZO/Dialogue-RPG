@@ -8,7 +8,12 @@ namespace RPG.Dialogue.Editor
 {
     public sealed class DialogueEditor : EditorWindow
     {
+        private const float CanvasSize = 4000f;
+        private const float BackgroundSize = 50f;
+
         private static Dialogue _selectedDialogueAsset;
+        private static readonly Texture2D BackgroundTexture = Resources.Load<Texture2D>("background");
+        private static readonly Rect BackgroundCoords = new(0f, 0f, CanvasSize / BackgroundSize, CanvasSize / BackgroundSize);
 
         [NonSerialized] private DialogueNode _creatingNode;
         [NonSerialized] private DialogueNode _deletingNode;
@@ -65,7 +70,8 @@ namespace RPG.Dialogue.Editor
 
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-            GUILayoutUtility.GetRect(4000, 4000);
+            Rect canvas = GUILayoutUtility.GetRect(CanvasSize, CanvasSize);
+            GUI.DrawTextureWithTexCoords(canvas, BackgroundTexture, BackgroundCoords);
 
             foreach (DialogueNode node in _selectedDialogueAsset)
                 DrawConnections(node);
