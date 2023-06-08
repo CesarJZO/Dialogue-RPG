@@ -12,7 +12,6 @@ namespace RPG.Dialogue.Editor
         private const float BackgroundSize = 50f;
 
         private static Dialogue _selectedDialogueAsset;
-        private static readonly Texture2D BackgroundTexture = Resources.Load<Texture2D>("background");
         private static readonly Rect BackgroundCoords = new(0f, 0f, CanvasSize / BackgroundSize, CanvasSize / BackgroundSize);
 
         [NonSerialized] private DialogueNode _creatingNode;
@@ -71,7 +70,8 @@ namespace RPG.Dialogue.Editor
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
             Rect canvas = GUILayoutUtility.GetRect(CanvasSize, CanvasSize);
-            GUI.DrawTextureWithTexCoords(canvas, BackgroundTexture, BackgroundCoords);
+            var backgroundTexture = Resources.Load<Texture2D>("background");
+            GUI.DrawTextureWithTexCoords(canvas, backgroundTexture, BackgroundCoords);
 
             foreach (DialogueNode node in _selectedDialogueAsset)
                 DrawConnections(node);
@@ -80,16 +80,15 @@ namespace RPG.Dialogue.Editor
 
             EditorGUILayout.EndScrollView();
 
-            if (_creatingNode != null)
+            if (_creatingNode)
             {
-                Undo.RecordObject(_selectedDialogueAsset, "Add dialogue node");
                 _selectedDialogueAsset.CreateNode(_creatingNode);
                 _creatingNode = null;
             }
 
-            if (_deletingNode != null)
+            if (_deletingNode)
             {
-                Undo.RecordObject(_selectedDialogueAsset, "Delete dialogue node");
+                Undo.RecordObject(_selectedDialogueAsset, "Delete Dialogue Node");
                 _selectedDialogueAsset.DeleteNode(_deletingNode);
                 _deletingNode = null;
             }
@@ -100,20 +99,24 @@ namespace RPG.Dialogue.Editor
         /// </summary>
         private void ProcessEvents()
         {
-            if (Event.current.type == EventType.MouseDown && _draggingNode == null && Event.current.button == 0)
+            if (Event.current.type == EventType.MouseDown && !_draggingNode && Event.current.button == 0)
             {
                 _draggingNode = GetNodeAtPoint(Event.current.mousePosition + _scrollPosition);
-                if (_draggingNode != null)
+                if (_draggingNode)
                 {
                     _draggingNodeOffset = Event.current.mousePosition - _draggingNode.rect.position;
+
+                    Selection.activeObject = _draggingNode;
                 }
                 else
                 {
                     _draggingCanvas = true;
                     _draggingCanvasOffset = Event.current.mousePosition + _scrollPosition;
+
+                    Selection.activeObject = _selectedDialogueAsset;
                 }
             }
-            else if (Event.current.type == EventType.MouseDrag && _draggingNode != null)
+            else if (Event.current.type == EventType.MouseDrag && _draggingNode)
             {
                 Undo.RecordObject(_selectedDialogueAsset, "Move Dialogue Node");
                 _draggingNode.rect.position = Event.current.mousePosition - _draggingNodeOffset;
@@ -124,7 +127,7 @@ namespace RPG.Dialogue.Editor
                 _scrollPosition = _draggingCanvasOffset - Event.current.mousePosition;
                 GUI.changed = true;
             }
-            else if (Event.current.type == EventType.MouseUp && _draggingNode != null && Event.current.button == 0)
+            else if (Event.current.type == EventType.MouseUp && _draggingNode && Event.current.button == 0)
             {
                 _draggingNode = null;
             }
@@ -160,7 +163,7 @@ namespace RPG.Dialogue.Editor
 
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(_selectedDialogueAsset, "Update dialogue text");
+                Undo.RecordObject(_selectedDialogueAsset, "Update Dialogue Text");
                 node.text = newText;
             }
 
@@ -209,7 +212,7 @@ namespace RPG.Dialogue.Editor
 
         private void DrawLinkButtons(DialogueNode node)
         {
-            if (_linkingParentNode == null)
+            if (!_linkingParentNode)
             {
                 if (GUILayout.Button("Link"))
                     _linkingParentNode = node;
@@ -219,12 +222,12 @@ namespace RPG.Dialogue.Editor
                 if (GUILayout.Button("Cancel"))
                     _linkingParentNode = null;
             }
-            else if (_linkingParentNode.HasChild(node.id))
+            else if (_linkingParentNode.HasChild(node.name))
             {
                 if (GUILayout.Button("Unlink"))
                 {
-                    Undo.RecordObject(_selectedDialogueAsset, "Remove dialogue link");
-                    _linkingParentNode.RemoveChild(node.id);
+                    Undo.RecordObject(_selectedDialogueAsset, "Remove Dialogue Link");
+                    _linkingParentNode.RemoveChild(node.name);
                     _linkingParentNode = null;
                 }
             }
@@ -232,8 +235,8 @@ namespace RPG.Dialogue.Editor
             {
                 if (GUILayout.Button("Child"))
                 {
-                    Undo.RecordObject(_selectedDialogueAsset, "Add dialogue link");
-                    _linkingParentNode.AddChild(node.id);
+                    Undo.RecordObject(_selectedDialogueAsset, "Add Dialogue Link");
+                    _linkingParentNode.AddChild(node.name);
                     _linkingParentNode = null;
                 }
             }

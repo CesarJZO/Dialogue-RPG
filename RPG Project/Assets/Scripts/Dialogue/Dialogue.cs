@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RPG.Dialogue
@@ -19,10 +21,7 @@ namespace RPG.Dialogue
             nodes ??= new List<DialogueNode>();
 
             if (nodes.Count == 0)
-            {
-                var rootNode = new DialogueNode();
-                nodes.Add(rootNode);
-            }
+                CreateNode(null);
 #endif
 
             OnValidate();
@@ -33,7 +32,7 @@ namespace RPG.Dialogue
             _nodeLookup.Clear();
 
             foreach (DialogueNode node in nodes)
-                _nodeLookup[node.id] = node;
+                _nodeLookup[node.name] = node;
         }
 
         public IEnumerator<DialogueNode> GetEnumerator()
@@ -64,9 +63,19 @@ namespace RPG.Dialogue
         /// <param name="parent">The parent node</param>
         public void CreateNode(DialogueNode parent)
         {
-            var newNode = new DialogueNode();
-            newNode.rect.position = parent.rect.position + Vector2.right * 250f;
-            parent.AddChild(newNode.id);
+            var newNode = CreateInstance<DialogueNode>();
+            newNode.name = Guid.NewGuid().ToString();
+            Undo.RegisterCreatedObjectUndo(newNode, "Create Dialogue Node");
+            if (parent)
+            {
+                newNode.rect.position = parent.rect.position + Vector2.right * 250f;
+                parent.AddChild(newNode.name);
+            }
+            else
+            {
+                newNode.rect.position = Vector2.zero;
+            }
+
             nodes.Add(newNode);
             OnValidate();
         }
@@ -78,6 +87,7 @@ namespace RPG.Dialogue
         public void DeleteNode(DialogueNode nodeToDelete)
         {
             nodes.Remove(nodeToDelete);
+            Undo.DestroyObjectImmediate(nodeToDelete);
             OnValidate();
             CleanDanglingChildren(nodeToDelete);
         }
@@ -86,7 +96,7 @@ namespace RPG.Dialogue
         {
             foreach (DialogueNode node in nodes)
             {
-                node.children.Remove(nodeToDelete.id);
+                node.children.Remove(nodeToDelete.name);
             }
         }
     }
