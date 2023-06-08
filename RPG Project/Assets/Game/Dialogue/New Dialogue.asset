@@ -15,10 +15,82 @@ MonoBehaviour:
   nodes:
   - id: ab38e8fd-f4f9-49a1-a2f0-35dcc5fff213
     text: 
+    children:
+    - fcd1f45b-6ae3-4946-91dd-2e946e4f9735
+    - 8e357469-df13-4b8a-9fda-3fdf64e61d70
+    rect:
+      serializedVersion: 2
+      x: 38
+      y: 171
+      width: 200
+      height: 120
+  - id: fcd1f45b-6ae3-4946-91dd-2e946e4f9735
+    text: 
+    children:
+    - 3e55c3ef-aa40-4351-ba05-2025027b6a42
+    - 17855a85-f252-4981-8b6d-35d06f9fd276
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 171
+      width: 200
+      height: 120
+  - id: 17855a85-f252-4981-8b6d-35d06f9fd276
+    text: 
+    children:
+    - b041a295-90b6-48f0-814a-f1ef9248779a
+    - e9ad7e69-abee-439f-bd37-7093cc180981
+    - b97ca5cb-d34b-4578-803e-ff1a7b5f0aa5
+    rect:
+      serializedVersion: 2
+      x: 536
+      y: 240
+      width: 200
+      height: 120
+  - id: 3e55c3ef-aa40-4351-ba05-2025027b6a42
+    text: 
+    children:
+    - e9ad7e69-abee-439f-bd37-7093cc180981
+    rect:
+      serializedVersion: 2
+      x: 538
+      y: 96
+      width: 200
+      height: 120
+  - id: e9ad7e69-abee-439f-bd37-7093cc180981
+    text: 
     children: []
     rect:
       serializedVersion: 2
-      x: 0
-      y: 0
+      x: 788
+      y: 96
+      width: 200
+      height: 120
+  - id: b041a295-90b6-48f0-814a-f1ef9248779a
+    text: 
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 786
+      y: 241
+      width: 200
+      height: 120
+  - id: 8e357469-df13-4b8a-9fda-3fdf64e61d70
+    text: 
+    children:
+    - 17855a85-f252-4981-8b6d-35d06f9fd276
+    rect:
+      serializedVersion: 2
+      x: 288
+      y: 300
+      width: 200
+      height: 120
+  - id: b97ca5cb-d34b-4578-803e-ff1a7b5f0aa5
+    text: 
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 786
+      y: 388
       width: 200
       height: 120

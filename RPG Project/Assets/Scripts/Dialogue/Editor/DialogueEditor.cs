@@ -15,10 +15,14 @@ namespace RPG.Dialogue.Editor
         [NonSerialized] private DialogueNode _linkingParentNode;
 
         [NonSerialized] private DialogueNode _draggingNode;
+        [NonSerialized] private Vector2 _draggingNodeOffset;
 
-        [NonSerialized] private Vector2 _draggingOffset;
+        [NonSerialized] private bool _draggingCanvas;
+        [NonSerialized] private Vector2 _draggingCanvasOffset;
 
         [NonSerialized] private GUIStyle _nodeStyle;
+
+        private Vector2 _scrollPosition;
 
         /// <summary>
         ///     Opens the Dialogue Editor window when the menu item is clicked.
@@ -59,10 +63,16 @@ namespace RPG.Dialogue.Editor
 
             ProcessEvents();
 
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            GUILayoutUtility.GetRect(4000, 4000);
+
             foreach (DialogueNode node in _selectedDialogueAsset)
                 DrawConnections(node);
             foreach (DialogueNode node in _selectedDialogueAsset)
                 DrawNode(node);
+
+            EditorGUILayout.EndScrollView();
 
             if (_creatingNode != null)
             {
@@ -86,19 +96,35 @@ namespace RPG.Dialogue.Editor
         {
             if (Event.current.type == EventType.MouseDown && _draggingNode == null && Event.current.button == 0)
             {
-                _draggingNode = GetNodeAtPoint(Event.current.mousePosition);
+                _draggingNode = GetNodeAtPoint(Event.current.mousePosition + _scrollPosition);
                 if (_draggingNode != null)
-                    _draggingOffset = Event.current.mousePosition - _draggingNode.rect.position;
+                {
+                    _draggingNodeOffset = Event.current.mousePosition - _draggingNode.rect.position;
+                }
+                else
+                {
+                    _draggingCanvas = true;
+                    _draggingCanvasOffset = Event.current.mousePosition + _scrollPosition;
+                }
             }
             else if (Event.current.type == EventType.MouseDrag && _draggingNode != null)
             {
                 Undo.RecordObject(_selectedDialogueAsset, "Move Dialogue Node");
-                _draggingNode.rect.position = Event.current.mousePosition - _draggingOffset;
+                _draggingNode.rect.position = Event.current.mousePosition - _draggingNodeOffset;
+                GUI.changed = true;
+            }
+            else if (Event.current.type == EventType.MouseDrag && _draggingCanvas)
+            {
+                _scrollPosition = _draggingCanvasOffset - Event.current.mousePosition;
                 GUI.changed = true;
             }
             else if (Event.current.type == EventType.MouseUp && _draggingNode != null && Event.current.button == 0)
             {
                 _draggingNode = null;
+            }
+            else if (Event.current.type == EventType.MouseUp && _draggingCanvas && Event.current.button == 0)
+            {
+                _draggingCanvas = false;
             }
         }
 
@@ -217,9 +243,15 @@ namespace RPG.Dialogue.Editor
             Repaint();
         }
 
+        private void OnUndoPerformed()
+        {
+            Repaint();
+        }
+
         private void OnEnable()
         {
             Selection.selectionChanged += OnSelectionChanged;
+            Undo.undoRedoPerformed += OnUndoPerformed;
 
             _nodeStyle = new GUIStyle
             {
@@ -232,6 +264,7 @@ namespace RPG.Dialogue.Editor
         private void OnDisable()
         {
             Selection.selectionChanged -= OnSelectionChanged;
+            Undo.undoRedoPerformed -= OnUndoPerformed;
         }
     }
 }
