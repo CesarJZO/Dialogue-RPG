@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -7,25 +8,13 @@ using UnityEngine;
 namespace RPG.Dialogue
 {
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue", order = 0)]
-    public sealed class Dialogue : ScriptableObject, IEnumerable<DialogueNode>
+    public sealed class Dialogue : ScriptableObject, IEnumerable<DialogueNode>, ISerializationCallbackReceiver
     {
         [SerializeField] private List<DialogueNode> nodes;
 
         private readonly Dictionary<string, DialogueNode> _nodeLookup = new();
 
         public DialogueNode RootNode => nodes[0];
-
-        private void Awake()
-        {
-#if UNITY_EDITOR
-            nodes ??= new List<DialogueNode>();
-
-            if (nodes.Count == 0)
-                CreateNode(null);
-#endif
-
-            OnValidate();
-        }
 
         private void OnValidate()
         {
@@ -95,9 +84,20 @@ namespace RPG.Dialogue
         private void CleanDanglingChildren(DialogueNode nodeToDelete)
         {
             foreach (DialogueNode node in nodes)
-            {
                 node.children.Remove(nodeToDelete.name);
-            }
         }
+
+        public void OnBeforeSerialize()
+        {
+            nodes ??= new List<DialogueNode>();
+            if (nodes.Count == 0)
+                CreateNode(null);
+
+            if (AssetDatabase.GetAssetPath(this) == string.Empty) return;
+            foreach (DialogueNode node in nodes.Where(node => AssetDatabase.GetAssetPath(node) == string.Empty))
+                AssetDatabase.AddObjectToAsset(node, this);
+        }
+
+        public void OnAfterDeserialize() { }
     }
 }
