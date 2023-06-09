@@ -37,9 +37,8 @@ namespace RPG.Dialogue
         public IEnumerable<DialogueNode> GetChildren(DialogueNode parentNode)
         {
             // return parentNode.children.Where(id => _nodeLookup.ContainsKey(id)).Select(id => _nodeLookup[id]);
-            if (parentNode.children == null) yield break;
 
-            foreach (string childId in parentNode.children)
+            foreach (string childId in parentNode.Children)
             {
                 if (_nodeLookup.TryGetValue(childId, out DialogueNode value))
                     yield return value;
@@ -57,14 +56,14 @@ namespace RPG.Dialogue
             Undo.RegisterCreatedObjectUndo(newNode, "Create Dialogue Node");
             if (parent)
             {
-                newNode.rect.position = parent.rect.position + Vector2.right * 250f;
+                newNode.Position += Vector2.right * 250f;
                 parent.AddChild(newNode.name);
             }
             else
             {
-                newNode.rect.position = Vector2.zero;
+                newNode.Position = Vector2.zero;
             }
-
+            Undo.RecordObject(this, "Add Dialogue Node");
             nodes.Add(newNode);
             OnValidate();
         }
@@ -75,16 +74,17 @@ namespace RPG.Dialogue
         /// <param name="nodeToDelete">The node to delete</param>
         public void DeleteNode(DialogueNode nodeToDelete)
         {
+            Undo.RecordObject(this, "Delete Dialogue Node");
             nodes.Remove(nodeToDelete);
-            Undo.DestroyObjectImmediate(nodeToDelete);
             OnValidate();
             CleanDanglingChildren(nodeToDelete);
-        }
+            Undo.DestroyObjectImmediate(nodeToDelete);
 
-        private void CleanDanglingChildren(DialogueNode nodeToDelete)
-        {
-            foreach (DialogueNode node in nodes)
-                node.children.Remove(nodeToDelete.name);
+            void CleanDanglingChildren(DialogueNode nodeToDelete)
+            {
+                foreach (DialogueNode node in nodes)
+                    node.RemoveChild(nodeToDelete.name);
+            }
         }
 
         public void OnBeforeSerialize()
