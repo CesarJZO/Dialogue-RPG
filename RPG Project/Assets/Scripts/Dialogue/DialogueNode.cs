@@ -1,18 +1,62 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RPG.Dialogue
 {
     public sealed class DialogueNode : ScriptableObject
     {
-        [TextArea] public string text;
-        public List<string> children = new();
-        [HideInInspector] public Rect rect = new(0f, 0f, 200f, 120f);
+        [SerializeField, TextArea] private string text;
+        private readonly List<string> _children = new();
+        private Rect _rect = new(0f, 0f, 200f, 120f);
 
-        public void AddChild(string childId) => children.Add(childId);
+        public IEnumerable<string> Children => _children.AsReadOnly();
 
-        public void RemoveChild(string childId) => children.Remove(childId);
+        public Rect Rect => _rect;
 
-        public bool HasChild(string childId) => children.Contains(childId);
+        public string Text
+        {
+            get => text;
+#if UNITY_EDITOR
+            set
+            {
+                if (value == text) return;
+                Undo.RecordObject(this, "Update Dialogue Text");
+                text = value;
+            }
+#endif
+        }
+
+#if UNITY_EDITOR
+        public Vector2 Position
+        {
+            set
+            {
+                Undo.RecordObject(this, "Move Dialogue Node");
+                _rect.position = value;
+            }
+        }
+
+        public void Initialize(string nodeName, Vector2 position)
+        {
+            name = nodeName;
+            _rect.position = position;
+        }
+
+        public void AddChild(string childId)
+        {
+            Undo.RecordObject(this, "Add Dialogue Link");
+            _children.Add(childId);
+        }
+
+        public void RemoveChild(string childId)
+        {
+            if (!_children.Contains(childId)) return;
+            Undo.RecordObject(this, "Remove Dialogue Link");
+            _children.Remove(childId);
+        }
+#endif
+
+        public bool HasChild(string childId) => _children.Contains(childId);
     }
 }

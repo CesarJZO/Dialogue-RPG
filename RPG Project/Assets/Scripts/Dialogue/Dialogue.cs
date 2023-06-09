@@ -37,36 +37,45 @@ namespace RPG.Dialogue
         public IEnumerable<DialogueNode> GetChildren(DialogueNode parentNode)
         {
             // return parentNode.children.Where(id => _nodeLookup.ContainsKey(id)).Select(id => _nodeLookup[id]);
-            if (parentNode.children == null) yield break;
+            if (parentNode.Children == null) yield break;
 
-            foreach (string childId in parentNode.children)
+            foreach (string childId in parentNode.Children)
             {
                 if (_nodeLookup.TryGetValue(childId, out DialogueNode value))
                     yield return value;
             }
         }
 
+#if UNITY_EDITOR
         /// <summary>
         ///     Creates a new node and adds it to the Dialogue and its parent node.
         /// </summary>
         /// <param name="parent">The parent node</param>
         public void CreateNode(DialogueNode parent)
         {
-            var newNode = CreateInstance<DialogueNode>();
-            newNode.name = Guid.NewGuid().ToString();
+            DialogueNode newNode = MakeNode(parent);
             Undo.RegisterCreatedObjectUndo(newNode, "Create Dialogue Node");
-            if (parent)
-            {
-                newNode.rect.position = parent.rect.position + Vector2.right * 250f;
-                parent.AddChild(newNode.name);
-            }
-            else
-            {
-                newNode.rect.position = Vector2.zero;
-            }
+            Undo.RecordObject(this, "Add Dialogue Node");
+            AddNode(newNode);
+        }
 
+        private void AddNode(DialogueNode newNode)
+        {
             nodes.Add(newNode);
             OnValidate();
+        }
+
+        private static DialogueNode MakeNode(DialogueNode parent)
+        {
+            var newNode = CreateInstance<DialogueNode>();
+            newNode.Initialize(
+                Guid.NewGuid().ToString(),
+                parent.Rect.position + Vector2.right * 250f
+            );
+
+            parent.AddChild(newNode.name);
+
+            return newNode;
         }
 
         /// <summary>
@@ -75,27 +84,37 @@ namespace RPG.Dialogue
         /// <param name="nodeToDelete">The node to delete</param>
         public void DeleteNode(DialogueNode nodeToDelete)
         {
+            Undo.RecordObject(this, "Delete Dialogue Node");
             nodes.Remove(nodeToDelete);
-            Undo.DestroyObjectImmediate(nodeToDelete);
             OnValidate();
-            CleanDanglingChildren(nodeToDelete);
+            CleanDanglingChildren();
+            Undo.DestroyObjectImmediate(nodeToDelete);
+
+            void CleanDanglingChildren()
+            {
+                foreach (DialogueNode node in nodes)
+                    node.RemoveChild(nodeToDelete.name);
+            }
         }
 
-        private void CleanDanglingChildren(DialogueNode nodeToDelete)
-        {
-            foreach (DialogueNode node in nodes)
-                node.children.Remove(nodeToDelete.name);
-        }
+
+#endif
 
         public void OnBeforeSerialize()
         {
+#if UNITY_EDITOR
             nodes ??= new List<DialogueNode>();
             if (nodes.Count == 0)
-                CreateNode(null);
+            {
+                var newNode = CreateInstance<DialogueNode>();
+                newNode.Initialize(Guid.NewGuid().ToString(), Vector2.zero);
+                AddNode(newNode);
+            }
 
             if (AssetDatabase.GetAssetPath(this) == string.Empty) return;
             foreach (DialogueNode node in nodes.Where(node => AssetDatabase.GetAssetPath(node) == string.Empty))
                 AssetDatabase.AddObjectToAsset(node, this);
+#endif
         }
 
         public void OnAfterDeserialize() { }
