@@ -52,17 +52,12 @@ namespace RPG.Dialogue
         public void CreateNode(DialogueNode parent)
         {
             var newNode = CreateInstance<DialogueNode>();
-            newNode.name = Guid.NewGuid().ToString();
+            newNode.Initialize(Guid.NewGuid().ToString(), parent ? parent.Position : Vector2.zero);
             Undo.RegisterCreatedObjectUndo(newNode, "Create Dialogue Node");
+
             if (parent)
-            {
-                newNode.Position += Vector2.right * 250f;
                 parent.AddChild(newNode.name);
-            }
-            else
-            {
-                newNode.Position = Vector2.zero;
-            }
+
             Undo.RecordObject(this, "Add Dialogue Node");
             nodes.Add(newNode);
             OnValidate();
@@ -77,10 +72,10 @@ namespace RPG.Dialogue
             Undo.RecordObject(this, "Delete Dialogue Node");
             nodes.Remove(nodeToDelete);
             OnValidate();
-            CleanDanglingChildren(nodeToDelete);
+            CleanDanglingChildren();
             Undo.DestroyObjectImmediate(nodeToDelete);
 
-            void CleanDanglingChildren(DialogueNode nodeToDelete)
+            void CleanDanglingChildren()
             {
                 foreach (DialogueNode node in nodes)
                     node.RemoveChild(nodeToDelete.name);

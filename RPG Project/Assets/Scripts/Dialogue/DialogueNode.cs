@@ -15,6 +15,12 @@ namespace RPG.Dialogue
 
         public IEnumerable<string> Children => _children.Any() ? _children : Enumerable.Empty<string>();
 
+        public void Initialize(string id, Vector2 position)
+        {
+            name = id;
+            _rect.position = position;
+        }
+
         public string Text
         {
             set
@@ -25,7 +31,7 @@ namespace RPG.Dialogue
             get => text;
         }
 
-        public Rect Rect => new (_rect);
+        public Rect Rect => _rect;
 
         public Vector2 Position
         {
@@ -63,6 +69,8 @@ namespace RPG.Dialogue
         /// <param name="childId">The child node's Guid</param>
         public void RemoveChild(string childId)
         {
+            if (!_children.Contains(childId)) return;
+
             Undo.RecordObject(this, "Remove Dialogue Link");
             _children.Remove(childId);
         }
