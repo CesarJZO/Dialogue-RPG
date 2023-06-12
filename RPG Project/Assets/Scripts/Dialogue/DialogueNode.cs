@@ -6,13 +6,27 @@ namespace RPG.Dialogue
 {
     public sealed class DialogueNode : ScriptableObject
     {
+        [SerializeField] private bool isPlayerSpeaking;
         [SerializeField, TextArea] private string text;
-        private readonly List<string> _children = new();
-        private Rect _rect = new(0f, 0f, 200f, 120f);
+        [SerializeField] private List<string> children = new();
+        [SerializeField] private Rect rect = new(0f, 0f, 200f, 120f);
 
-        public IEnumerable<string> Children => _children.AsReadOnly();
+        public IEnumerable<string> Children => children.AsReadOnly();
 
-        public Rect Rect => _rect;
+        public Rect Rect => rect;
+
+        public bool IsPlayerSpeaking
+        {
+            get => isPlayerSpeaking;
+#if UNITY_EDITOR
+            set
+            {
+                Undo.RecordObject(this, "Change Dialogue Speaker");
+                isPlayerSpeaking = value;
+                EditorUtility.SetDirty(this);
+            }
+#endif
+        }
 
         public string Text
         {
@@ -34,33 +48,34 @@ namespace RPG.Dialogue
             set
             {
                 Undo.RecordObject(this, "Move Dialogue Node");
-                _rect.position = value;
+                rect.position = value;
                 EditorUtility.SetDirty(this);
             }
         }
 
-        public void Initialize(string nodeName, Vector2 position)
+        public void Initialize(string nodeName, Vector2 position, bool isPlayerSpeaking)
         {
             name = nodeName;
-            _rect.position = position;
+            rect.position = position;
+            this.isPlayerSpeaking = isPlayerSpeaking;
         }
 
         public void AddChild(string childId)
         {
             Undo.RecordObject(this, "Add Dialogue Link");
-            _children.Add(childId);
+            children.Add(childId);
             EditorUtility.SetDirty(this);
         }
 
         public void RemoveChild(string childId)
         {
-            if (!_children.Contains(childId)) return;
+            if (!children.Contains(childId)) return;
             Undo.RecordObject(this, "Remove Dialogue Link");
-            _children.Remove(childId);
+            children.Remove(childId);
             EditorUtility.SetDirty(this);
         }
 #endif
 
-        public bool HasChild(string childId) => _children.Contains(childId);
+        public bool HasChild(string childId) => children.Contains(childId);
     }
 }

@@ -24,6 +24,7 @@ namespace RPG.Dialogue.Editor
         [NonSerialized] private bool _draggingCanvas;
         [NonSerialized] private Vector2 _draggingCanvasOffset;
 
+        [NonSerialized] private GUIStyle _playerNodeStyle;
         [NonSerialized] private GUIStyle _nodeStyle;
 
         private Vector2 _scrollPosition;
@@ -152,7 +153,7 @@ namespace RPG.Dialogue.Editor
         /// <param name="node">The DialogueNode to draw</param>
         private void DrawNode(DialogueNode node)
         {
-            GUILayout.BeginArea(node.Rect, _nodeStyle);
+            GUILayout.BeginArea(node.Rect, node.IsPlayerSpeaking ? _playerNodeStyle : _nodeStyle);
 
             node.Text = EditorGUILayout.TextArea(node.Text, GUILayout.Height(50f));
 
@@ -254,6 +255,13 @@ namespace RPG.Dialogue.Editor
             _nodeStyle = new GUIStyle
             {
                 normal = { background = EditorGUIUtility.Load("node0") as Texture2D },
+                padding = new RectOffset(20, 20, 20, 20),
+                border = new RectOffset(12, 12, 12, 12)
+            };
+
+            _playerNodeStyle = new GUIStyle
+            {
+                normal = { background = EditorGUIUtility.Load("node1") as Texture2D },
                 padding = new RectOffset(20, 20, 20, 20),
                 border = new RectOffset(12, 12, 12, 12)
             };

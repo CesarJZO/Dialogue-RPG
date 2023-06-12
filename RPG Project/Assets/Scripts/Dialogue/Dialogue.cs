@@ -69,8 +69,9 @@ namespace RPG.Dialogue
         {
             var newNode = CreateInstance<DialogueNode>();
             newNode.Initialize(
-                Guid.NewGuid().ToString(),
-                parent.Rect.position + Vector2.right * 250f
+                nodeName: Guid.NewGuid().ToString(),
+                position: parent.Rect.position + Vector2.right * 250f,
+                isPlayerSpeaking: !parent.IsPlayerSpeaking
             );
 
             parent.AddChild(newNode.name);
@@ -107,7 +108,7 @@ namespace RPG.Dialogue
             if (nodes.Count == 0)
             {
                 var newNode = CreateInstance<DialogueNode>();
-                newNode.Initialize(Guid.NewGuid().ToString(), Vector2.zero);
+                newNode.Initialize(Guid.NewGuid().ToString(), Vector2.zero, false);
                 AddNode(newNode);
             }
 
