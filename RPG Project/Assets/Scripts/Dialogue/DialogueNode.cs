@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPG.Dialogue
 {
+    /// <summary>
+    ///     A node in a dialogue graph.
+    /// </summary>
     public sealed class DialogueNode : ScriptableObject
     {
         [SerializeField] private bool isPlayerSpeaking;
