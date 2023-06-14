@@ -18,7 +18,7 @@ namespace RPG.Dialogue
         /// <summary>
         ///     Returns the text of the current node.
         /// </summary>
-        /// <returns>The text of the current node if available, otherwise "Node not available"</returns>
+        /// <returns>The text of the current node if available, otherwise <c>"Node not available"</c></returns>
         public string GetText() => !_currentNode ? "Node not available" : _currentNode.Text;
 
         /// <summary>
