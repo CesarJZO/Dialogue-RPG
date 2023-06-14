@@ -194,8 +194,8 @@ MonoBehaviour:
   - d57aa249-00b0-479b-8d8a-5f26d1e52d9a
   rect:
     serializedVersion: 2
-    x: 298
-    y: 314
+    x: 265
+    y: 309
     width: 200
     height: 120
 --- !u!114 &990927628614366312
