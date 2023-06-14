@@ -154,8 +154,13 @@ namespace RPG.Dialogue.Editor
         private void DrawNode(DialogueNode node)
         {
             GUILayout.BeginArea(node.Rect, node.IsPlayerSpeaking ? _playerNodeStyle : _nodeStyle);
+            var textAreaStyle = new GUIStyle(EditorStyles.textArea)
+            {
+                wordWrap = true,
+                fixedHeight = 50f
+            };
 
-            node.Text = EditorGUILayout.TextArea(node.Text, GUILayout.Height(50f));
+            node.Text = EditorGUILayout.TextArea(node.Text, textAreaStyle);
 
             EditorGUILayout.Space();
 
