@@ -10,6 +10,9 @@ namespace RPG.UI
         [SerializeField] private TextMeshProUGUI aiText;
         [SerializeField] private Button nextButton;
 
+        [SerializeField] private Transform choiceRoot;
+        [SerializeField] private GameObject choicePrefab;
+
         private PlayerConversant _playerConversant;
 
         private void Awake()
@@ -36,6 +39,15 @@ namespace RPG.UI
             aiText.text = _playerConversant.GetText();
 
             nextButton.gameObject.SetActive(_playerConversant.HasNext());
+
+            foreach (Transform item in choiceRoot)
+                Destroy(item.gameObject);
+
+            foreach (string choiceText in _playerConversant.GetChoices())
+            {
+                GameObject choiceInstance = Instantiate(choicePrefab, choiceRoot);
+                choiceInstance.GetComponentInChildren<TextMeshProUGUI>().text = choiceText;
+            }
         }
     }
 }
