@@ -9,6 +9,13 @@ namespace RPG.Dialogue
         [SerializeField] private Dialogue currentDialogue;
         private DialogueNode _currentNode;
 
+        private bool _isChoosing;
+
+        public bool IsChoosing()
+        {
+            return _isChoosing;
+        }
+
         private void Awake()
         {
             if (!currentDialogue) return;
@@ -21,14 +28,21 @@ namespace RPG.Dialogue
         /// <returns>The text of the current node if available, otherwise <c>"Node not available"</c></returns>
         public string GetText() => !_currentNode ? "Node not available" : _currentNode.Text;
 
-        public IEnumerable<string> GetChoices() => currentDialogue.GetChildren(_currentNode).Select(node => node.Text);
+        public IEnumerable<DialogueNode> GetChoices() => currentDialogue.GetChildren(_currentNode);
 
         /// <summary>
         ///     Returns the children of the current node.
         /// </summary>
         public void Next()
         {
-            List<DialogueNode> children = currentDialogue.GetChildren(_currentNode).ToList();
+            int playerResponsesCount = currentDialogue.GetPlayerChildren(_currentNode).Count();
+            if (playerResponsesCount > 0)
+            {
+                _isChoosing = true;
+                return;
+            }
+
+            List<DialogueNode> children = currentDialogue.GetAIChildren(_currentNode).ToList();
             _currentNode = children[Random.Range(0, children.Count)];
         }
 

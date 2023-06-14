@@ -46,6 +46,16 @@ namespace RPG.Dialogue
             }
         }
 
+        public IEnumerable<DialogueNode> GetPlayerChildren(DialogueNode parentNode)
+        {
+            return GetChildren(parentNode).Where(node => node.IsPlayerSpeaking);
+        }
+
+        public IEnumerable<DialogueNode> GetAIChildren(DialogueNode parentNode)
+        {
+            return GetChildren(parentNode).Where(node => !node.IsPlayerSpeaking);
+        }
+
 #if UNITY_EDITOR
         /// <summary>
         ///     Creates a new node and adds it to the Dialogue and its parent node.
