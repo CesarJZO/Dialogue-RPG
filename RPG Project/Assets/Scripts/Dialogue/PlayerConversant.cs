@@ -28,7 +28,18 @@ namespace RPG.Dialogue
         /// <returns>The text of the current node if available, otherwise <c>"Node not available"</c></returns>
         public string GetText() => !_currentNode ? "Node not available" : _currentNode.Text;
 
+        /// <summary>
+        ///     Returns the children of the current node.
+        /// </summary>
+        /// <returns>The children of the current node</returns>
         public IEnumerable<DialogueNode> GetChoices() => currentDialogue.GetChildren(_currentNode);
+
+        public void SelectChoice(DialogueNode chosenNode)
+        {
+            _currentNode = chosenNode;
+            _isChoosing = false;
+            Next();
+        }
 
         /// <summary>
         ///     Returns the children of the current node.
