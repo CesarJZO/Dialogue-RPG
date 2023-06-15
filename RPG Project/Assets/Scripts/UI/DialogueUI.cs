@@ -9,6 +9,7 @@ namespace RPG.UI
     {
         [SerializeField] private TextMeshProUGUI aiText;
         [SerializeField] private Button nextButton;
+        [SerializeField] private Button quitButton;
 
         [SerializeField] private GameObject aIResponse;
         [SerializeField] private Transform choiceRoot;
@@ -25,16 +26,16 @@ namespace RPG.UI
         {
             _playerConversant.ConversationUpdated += UpdateUI;
             nextButton.onClick.AddListener(_playerConversant.Next);
+            quitButton.onClick.AddListener(_playerConversant.Quit);
 
             UpdateUI();
         }
 
         private void UpdateUI()
         {
+            gameObject.SetActive(_playerConversant.HasDialogue);
             if (!_playerConversant.HasDialogue)
-            {
                 return;
-            }
 
             aIResponse.SetActive(!_playerConversant.IsChoosing());
             choiceRoot.gameObject.SetActive(_playerConversant.IsChoosing());

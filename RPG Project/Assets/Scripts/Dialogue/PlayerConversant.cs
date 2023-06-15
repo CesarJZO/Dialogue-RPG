@@ -25,6 +25,14 @@ namespace RPG.Dialogue
             ConversationUpdated?.Invoke();
         }
 
+        public void Quit()
+        {
+            _currentDialogue = null;
+            _currentNode = null;
+            _isChoosing = false;
+            ConversationUpdated?.Invoke();
+        }
+
         public bool HasDialogue => _currentDialogue;
 
         public bool IsChoosing() => _isChoosing;
