@@ -20,12 +20,14 @@ namespace RPG.Dialogue
         {
             _currentDialogue = dialogue;
             _currentNode = _currentDialogue.RootNode;
+            TriggerEnterAction();
             ConversationUpdated?.Invoke();
         }
 
         public void Quit()
         {
             _currentDialogue = null;
+            TriggerExitAction();
             _currentNode = null;
             _isChoosing = false;
             ConversationUpdated?.Invoke();
@@ -50,6 +52,7 @@ namespace RPG.Dialogue
         public void SelectChoice(DialogueNode chosenNode)
         {
             _currentNode = chosenNode;
+            TriggerEnterAction();
             _isChoosing = false;
             Next();
         }
@@ -63,12 +66,15 @@ namespace RPG.Dialogue
             if (playerResponsesCount > 0)
             {
                 _isChoosing = true;
+                TriggerExitAction();
                 ConversationUpdated?.Invoke();
                 return;
             }
 
             List<DialogueNode> children = _currentDialogue.GetAIChildren(_currentNode).ToList();
+            TriggerExitAction();
             _currentNode = children[Random.Range(0, children.Count)];
+            TriggerEnterAction();
             ConversationUpdated?.Invoke();
         }
 
@@ -77,5 +83,21 @@ namespace RPG.Dialogue
         /// </summary>
         /// <returns>Whether the current node has any children</returns>
         public bool HasNext() => _currentDialogue.GetChildren(_currentNode).Any();
+
+        private void TriggerEnterAction()
+        {
+            if (_currentNode && _currentNode.OnEnterAction != "")
+            {
+
+            }
+        }
+
+        private void TriggerExitAction()
+        {
+            if (_currentNode && _currentNode.OnExitAction != "")
+            {
+
+            }
+        }
     }
 }

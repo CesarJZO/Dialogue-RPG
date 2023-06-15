@@ -13,6 +13,8 @@ namespace RPG.Dialogue
         [SerializeField, TextArea] private string text;
         [SerializeField] private List<string> children = new();
         [SerializeField] private Rect rect = new(0f, 0f, 200f, 120f);
+        [SerializeField] private string onEnterAction;
+        [SerializeField] private string onExitAction;
 
         public IEnumerable<string> Children => children.AsReadOnly();
 
@@ -80,5 +82,9 @@ namespace RPG.Dialogue
 #endif
 
         public bool HasChild(string childId) => children.Contains(childId);
+
+        public string OnEnterAction => onEnterAction;
+
+        public string OnExitAction => onExitAction;
     }
 }
