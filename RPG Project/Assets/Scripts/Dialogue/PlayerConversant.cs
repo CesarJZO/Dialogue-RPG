@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,13 +10,17 @@ namespace RPG.Dialogue
     {
         public event Action ConversationUpdated;
 
+        [SerializeField] private AIConversant currentConversant;
+
+
         private Dialogue _currentDialogue;
 
         private DialogueNode _currentNode;
         private bool _isChoosing;
 
-        public void StartDialogue(Dialogue dialogue)
+        public void StartDialogue(AIConversant conversant, Dialogue dialogue)
         {
+            currentConversant = conversant;
             _currentDialogue = dialogue;
             _currentNode = _currentDialogue.RootNode;
             TriggerEnterAction();
@@ -29,6 +32,7 @@ namespace RPG.Dialogue
             _currentDialogue = null;
             TriggerExitAction();
             _currentNode = null;
+            currentConversant = null;
             _isChoosing = false;
             ConversationUpdated?.Invoke();
         }
@@ -86,17 +90,27 @@ namespace RPG.Dialogue
 
         private void TriggerEnterAction()
         {
-            if (_currentNode && _currentNode.OnEnterAction != "")
+            if (_currentNode)
             {
-
+                TriggerAction(_currentNode.OnEnterAction);
             }
         }
 
         private void TriggerExitAction()
         {
-            if (_currentNode && _currentNode.OnExitAction != "")
+            if (_currentNode)
             {
+                TriggerAction(_currentNode.OnExitAction);
+            }
+        }
 
+        private void TriggerAction(string action)
+        {
+            if (action is "" or null) return;
+
+            foreach (DialogueTrigger trigger in currentConversant.GetComponents<DialogueTrigger>())
+            {
+                trigger.Trigger(action);
             }
         }
     }

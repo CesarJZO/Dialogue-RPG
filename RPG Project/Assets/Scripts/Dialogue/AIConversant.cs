@@ -14,7 +14,7 @@ namespace RPG.Dialogue
             if (!dialogue) return false;
             if (!Input.GetMouseButtonDown(0)) return false;
             if (!callingController.TryGetComponent(out PlayerConversant conversant)) return false;
-            conversant.StartDialogue(dialogue);
+            conversant.StartDialogue(this, dialogue);
             return true;
         }
     }
