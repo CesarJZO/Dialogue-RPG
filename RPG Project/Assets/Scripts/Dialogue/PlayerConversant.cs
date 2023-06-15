@@ -1,25 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace RPG.Dialogue
 {
     public class PlayerConversant : MonoBehaviour
     {
-        [SerializeField] private Dialogue currentDialogue;
-        private DialogueNode _currentNode;
+        public event Action ConversationUpdated;
 
+        public Dialogue testDialogue;
+
+        private Dialogue _currentDialogue;
+
+        private DialogueNode _currentNode;
         private bool _isChoosing;
 
-        public bool IsChoosing()
+        public void StartDialogue(Dialogue dialogue)
         {
-            return _isChoosing;
+            _currentDialogue = dialogue;
+            _currentNode = _currentDialogue.RootNode;
+            ConversationUpdated?.Invoke();
         }
 
-        private void Awake()
+        public bool HasDialogue => _currentDialogue;
+
+        public bool IsChoosing() => _isChoosing;
+
+        private IEnumerator Start()
         {
-            if (!currentDialogue) return;
-            _currentNode = currentDialogue.RootNode;
+            yield return new WaitForSeconds(2f);
+            StartDialogue(testDialogue);
         }
 
         /// <summary>
@@ -32,7 +45,7 @@ namespace RPG.Dialogue
         ///     Returns the children of the current node.
         /// </summary>
         /// <returns>The children of the current node</returns>
-        public IEnumerable<DialogueNode> GetChoices() => currentDialogue.GetChildren(_currentNode);
+        public IEnumerable<DialogueNode> GetChoices() => _currentDialogue.GetChildren(_currentNode);
 
         public void SelectChoice(DialogueNode chosenNode)
         {
@@ -42,25 +55,27 @@ namespace RPG.Dialogue
         }
 
         /// <summary>
-        ///     Returns the children of the current node.
+        ///     Moves to the next node in the dialogue.
         /// </summary>
         public void Next()
         {
-            int playerResponsesCount = currentDialogue.GetPlayerChildren(_currentNode).Count();
+            int playerResponsesCount = _currentDialogue.GetPlayerChildren(_currentNode).Count();
             if (playerResponsesCount > 0)
             {
                 _isChoosing = true;
+                ConversationUpdated?.Invoke();
                 return;
             }
 
-            List<DialogueNode> children = currentDialogue.GetAIChildren(_currentNode).ToList();
+            List<DialogueNode> children = _currentDialogue.GetAIChildren(_currentNode).ToList();
             _currentNode = children[Random.Range(0, children.Count)];
+            ConversationUpdated?.Invoke();
         }
 
         /// <summary>
         ///     Returns true if the current node has any children.
         /// </summary>
         /// <returns>Whether the current node has any children</returns>
-        public bool HasNext() => currentDialogue.GetChildren(_currentNode).Any();
+        public bool HasNext() => _currentDialogue.GetChildren(_currentNode).Any();
     }
 }

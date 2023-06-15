@@ -23,20 +23,19 @@ namespace RPG.UI
 
         private void Start()
         {
-            nextButton.onClick.AddListener(Next);
-
-            UpdateUI();
-        }
-
-        private void Next()
-        {
-            _playerConversant.Next();
+            _playerConversant.ConversationUpdated += UpdateUI;
+            nextButton.onClick.AddListener(_playerConversant.Next);
 
             UpdateUI();
         }
 
         private void UpdateUI()
         {
+            if (!_playerConversant.HasDialogue)
+            {
+                return;
+            }
+
             aIResponse.SetActive(!_playerConversant.IsChoosing());
             choiceRoot.gameObject.SetActive(_playerConversant.IsChoosing());
 
@@ -63,11 +62,7 @@ namespace RPG.UI
                 GameObject choiceInstance = Instantiate(choicePrefab, choiceRoot);
                 choiceInstance.GetComponentInChildren<TextMeshProUGUI>().text = choice.Text;
                 var button = choiceInstance.GetComponentInChildren<Button>();
-                button.onClick.AddListener(() =>
-                {
-                    _playerConversant.SelectChoice(choice);
-                    UpdateUI();
-                });
+                button.onClick.AddListener(() => _playerConversant.SelectChoice(choice));
             }
         }
     }
