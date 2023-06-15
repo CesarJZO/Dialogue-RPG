@@ -11,8 +11,6 @@ namespace RPG.Dialogue
     {
         public event Action ConversationUpdated;
 
-        public Dialogue testDialogue;
-
         private Dialogue _currentDialogue;
 
         private DialogueNode _currentNode;
@@ -36,12 +34,6 @@ namespace RPG.Dialogue
         public bool HasDialogue => _currentDialogue;
 
         public bool IsChoosing() => _isChoosing;
-
-        private IEnumerator Start()
-        {
-            yield return new WaitForSeconds(2f);
-            StartDialogue(testDialogue);
-        }
 
         /// <summary>
         ///     Returns the text of the current node.

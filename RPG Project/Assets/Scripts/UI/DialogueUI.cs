@@ -51,6 +51,7 @@ namespace RPG.UI
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void BuildChoiceList()
         {
             foreach (Transform item in choiceRoot)
