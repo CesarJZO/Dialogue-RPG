@@ -10,8 +10,8 @@ namespace RPG.Dialogue
     {
         public event Action ConversationUpdated;
 
+        [SerializeField] private string playerName;
         [SerializeField] private AIConversant currentConversant;
-
 
         private Dialogue _currentDialogue;
 
@@ -40,6 +40,8 @@ namespace RPG.Dialogue
         public bool HasDialogue => _currentDialogue;
 
         public bool IsChoosing() => _isChoosing;
+
+        public string GetCurrentConversantName() => _isChoosing ? playerName : currentConversant.ConversantName;
 
         /// <summary>
         ///     Returns the text of the current node.

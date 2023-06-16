@@ -3894,6 +3894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375eac6a16ef4e71898e3c00e3c9f4ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conversantName: 
   dialogue: {fileID: 11400000, guid: f1a0b0f3bbe7df944be1471c8db711b5, type: 2}
 --- !u!1001 &760967109
 PrefabInstance:
@@ -7991,7 +7992,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514019296}
-  m_LocalRotation: {x: 0.05169862, y: -0.18763892, z: 0.009890302, w: 0.98082674}
+  m_LocalRotation: {x: 0.05169862, y: -0.18763891, z: 0.009890302, w: 0.98082674}
   m_LocalPosition: {x: -28.418999, y: 2.6535158, z: 24.490223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9070,6 +9071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375eac6a16ef4e71898e3c00e3c9f4ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conversantName: Suspicious Guard
   dialogue: {fileID: 11400000, guid: 4f6bdd39e269f2a488fa2fed5d5e99e0, type: 2}
 --- !u!114 &1766277522
 MonoBehaviour:
@@ -12031,7 +12033,7 @@ PrefabInstance:
     - target: {fileID: 5263524460118599961, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.75
+      value: -570.7498
       objectReference: {fileID: 0}
     - target: {fileID: 5337740145829479677, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}

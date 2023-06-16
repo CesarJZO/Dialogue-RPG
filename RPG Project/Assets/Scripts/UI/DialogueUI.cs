@@ -7,6 +7,7 @@ namespace RPG.UI
 {
     public class DialogueUI : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI conversantName;
         [SerializeField] private TextMeshProUGUI aiText;
         [SerializeField] private Button nextButton;
         [SerializeField] private Button quitButton;
@@ -36,6 +37,8 @@ namespace RPG.UI
             gameObject.SetActive(_playerConversant.HasDialogue);
             if (!_playerConversant.HasDialogue)
                 return;
+
+            conversantName.text = _playerConversant.GetCurrentConversantName();
 
             aIResponse.SetActive(!_playerConversant.IsChoosing());
             choiceRoot.gameObject.SetActive(_playerConversant.IsChoosing());

@@ -818,6 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 881e3d9893024e299fd9a1523e4782f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conversantName: {fileID: 5183037288749501721}
   aiText: {fileID: 5193343964670716487}
   nextButton: {fileID: 2361645714803807009}
   quitButton: {fileID: 1470561913199295369}

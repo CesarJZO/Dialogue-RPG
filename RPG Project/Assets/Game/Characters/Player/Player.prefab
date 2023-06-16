@@ -298,7 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a479a8b5784a9183fa484ae804077d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDialogue: {fileID: 11400000, guid: 4f6bdd39e269f2a488fa2fed5d5e99e0, type: 2}
+  playerName: Knight
+  currentConversant: {fileID: 0}
 --- !u!114 &7122694563460434362
 MonoBehaviour:
   m_ObjectHideFlags: 0

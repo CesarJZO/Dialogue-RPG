@@ -5,7 +5,10 @@ namespace RPG.Dialogue
 {
     public class AIConversant : MonoBehaviour, IRaycastable
     {
+        [SerializeField] private string conversantName;
         [SerializeField] private Dialogue dialogue;
+
+        public string ConversantName => conversantName;
 
         public CursorType GetCursorType() => CursorType.Dialogue;
 
