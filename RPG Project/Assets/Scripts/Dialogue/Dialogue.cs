@@ -26,7 +26,7 @@ namespace RPG.Dialogue
 
         public IEnumerator<DialogueNode> GetEnumerator()
         {
-            return nodes.GetEnumerator();
+            return nodes.AsReadOnly().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
