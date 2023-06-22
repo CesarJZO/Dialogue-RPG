@@ -8,8 +8,8 @@ namespace RPG.UI.Quests
     {
         public override void UpdateTooltip(GameObject tooltip)
         {
-            Quest quest = GetComponent<QuestItemUI>().Quest;
-            tooltip.GetComponent<QuestTooltipUI>().Setup(quest);
+            QuestStatus status = GetComponent<QuestItemUI>().QuestStatus;
+            tooltip.GetComponent<QuestTooltipUI>().Setup(status);
         }
 
         public override bool CanCreateTooltip()

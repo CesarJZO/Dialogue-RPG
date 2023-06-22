@@ -9,9 +9,11 @@ namespace RPG.UI.Quests
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private Transform objectiveContainer;
         [SerializeField] private GameObject objectivePrefab;
+        [SerializeField] private GameObject objectiveIncompletePrefab;
 
-        public void Setup(Quest quest)
+        public void Setup(QuestStatus status)
         {
+            Quest quest = status.Quest;
             title.text = quest.Title;
 
             foreach (Transform t in objectiveContainer)
@@ -21,7 +23,8 @@ namespace RPG.UI.Quests
 
             foreach (string objective in quest.Objectives)
             {
-                GameObject objectiveInstance = Instantiate(objectivePrefab, objectiveContainer);
+                GameObject prefab = status.IsComplete(objective) ? objectivePrefab : objectiveIncompletePrefab;
+                GameObject objectiveInstance = Instantiate(prefab, objectiveContainer);
                 objectiveInstance.GetComponentInChildren<TextMeshProUGUI>().text = objective;
             }
         }
