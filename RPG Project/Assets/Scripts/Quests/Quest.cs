@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using GameDevTV.Inventories;
 using UnityEngine;
 
 namespace RPG.Quests
@@ -7,22 +9,35 @@ namespace RPG.Quests
     [CreateAssetMenu(fileName = "New Quest", menuName = "Quest", order = 0)]
     public class Quest : ScriptableObject
     {
-        [SerializeField] private string[] objectives;
+        [Serializable]
+        public class Objective
+        {
+            public string reference;
+            public string description;
+        }
+
+        [Serializable]
+        public class Reward
+        {
+            public int amount;
+            public InventoryItem item;
+        }
+
+        [SerializeField] private Objective[] objectives;
+        [SerializeField] private List<Reward> rewards = new();
 
         public string Title => name;
         public int ObjectiveCount => objectives.Length;
-        public IEnumerable<string> Objectives => objectives;
+        public IEnumerable<Objective> Objectives => objectives;
 
-        public bool HasObjective(string objective) => objectives.Any(o => o == objective);
+        public bool HasObjective(string objectiveReference)
+        {
+            return objectives.Any(objective => objective.reference == objectiveReference);
+        }
 
         public static Quest GetByName(string questName)
         {
-            foreach (Quest quest in Resources.LoadAll<Quest>(""))
-            {
-                if (quest.name == questName) return quest;
-            }
-
-            return null;
+            return Resources.LoadAll<Quest>(string.Empty).FirstOrDefault(quest => quest.name == questName);
         }
     }
 }

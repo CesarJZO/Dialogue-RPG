@@ -8033,7 +8033,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514019296}
-  m_LocalRotation: {x: 0.05169862, y: -0.18763892, z: 0.009890302, w: 0.98082674}
+  m_LocalRotation: {x: 0.05169862, y: -0.18763891, z: 0.009890302, w: 0.98082674}
   m_LocalPosition: {x: -28.418999, y: 2.6535158, z: 24.490223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9155,7 +9155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quest: {fileID: 11400000, guid: 3bf5563c8c0fbb746a84c64f4d2d0acf, type: 2}
-  objective: Underbed sock
+  objective: 2
 --- !u!114 &1766277536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13866,7 +13866,7 @@ PrefabInstance:
     - target: {fileID: 5263524460118599961, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.7499
+      value: -570.7493
       objectReference: {fileID: 0}
     - target: {fileID: 5290860648672347613, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}

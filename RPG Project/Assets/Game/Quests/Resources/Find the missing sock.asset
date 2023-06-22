@@ -13,5 +13,10 @@ MonoBehaviour:
   m_Name: Find the missing sock
   m_EditorClassIdentifier: 
   objectives:
-  - Underbed sock
-  - Closet sock
+  - reference: 2
+    description: Go irritate the guard
+  - reference: 3
+    description: Get the sock
+  rewards:
+  - amount: 1
+    item: {fileID: 11400000, guid: d64a307491012e543995a2eef4f8cf74, type: 2}
