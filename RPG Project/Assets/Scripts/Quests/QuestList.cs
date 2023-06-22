@@ -22,5 +22,14 @@ namespace RPG.Quests
         }
 
         private bool HasQuest(Quest quest) => _statuses.Any(status => status.Quest == quest);
+
+        public void CompleteObjective(Quest quest, string objective)
+        {
+            QuestStatus status = GetQuestStatus(quest);
+            status.CompleteObjective(objective);
+            Updated?.Invoke();
+        }
+
+        private QuestStatus GetQuestStatus(Quest quest) => _statuses.FirstOrDefault(status => status.Quest == quest);
     }
 }

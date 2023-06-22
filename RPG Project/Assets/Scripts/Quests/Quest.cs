@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RPG.Quests
@@ -11,5 +12,7 @@ namespace RPG.Quests
         public string Title => name;
         public int ObjectiveCount => objectives.Length;
         public IEnumerable<string> Objectives => objectives;
+
+        public bool HasObjective(string objective) => objectives.Any(o => o == objective);
     }
 }

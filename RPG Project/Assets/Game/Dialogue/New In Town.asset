@@ -141,7 +141,7 @@ MonoBehaviour:
     width: 200
     height: 120
   onEnterAction: 
-  onExitAction: 
+  onExitAction: TextObjective
 --- !u!114 &-1063107120347369083
 MonoBehaviour:
   m_ObjectHideFlags: 0

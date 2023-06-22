@@ -16,5 +16,12 @@ namespace RPG.Quests
         public int CompletedCount => _completedObjectives.Count;
 
         public bool IsComplete(string objective) => _completedObjectives.Contains(objective);
+
+        public void CompleteObjective(string objective)
+        {
+            if (!Quest.HasObjective(objective)) return;
+            if (IsComplete(objective)) return;
+            _completedObjectives.Add(objective);
+        }
     }
 }
