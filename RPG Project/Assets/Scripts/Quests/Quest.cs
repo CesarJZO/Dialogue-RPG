@@ -14,5 +14,15 @@ namespace RPG.Quests
         public IEnumerable<string> Objectives => objectives;
 
         public bool HasObjective(string objective) => objectives.Any(o => o == objective);
+
+        public static Quest GetByName(string questName)
+        {
+            foreach (Quest quest in Resources.LoadAll<Quest>(""))
+            {
+                if (quest.name == questName) return quest;
+            }
+
+            return null;
+        }
     }
 }
