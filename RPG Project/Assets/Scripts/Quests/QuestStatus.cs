@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RPG.Quests
 {
@@ -30,12 +31,14 @@ namespace RPG.Quests
 
         public int CompletedCount => _completedObjectives.Count;
 
-        public bool IsComplete(string objective) => _completedObjectives.Contains(objective);
+        public bool IsObjectiveComplete(string objective) => _completedObjectives.Contains(objective);
+
+        public bool IsComplete() => Quest.Objectives.All(objective => IsObjectiveComplete(objective.reference));
 
         public void CompleteObjective(string objective)
         {
             if (!Quest.HasObjective(objective)) return;
-            if (IsComplete(objective)) return;
+            if (IsObjectiveComplete(objective)) return;
             _completedObjectives.Add(objective);
         }
 

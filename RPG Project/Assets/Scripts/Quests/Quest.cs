@@ -19,7 +19,7 @@ namespace RPG.Quests
         [Serializable]
         public class Reward
         {
-            public int amount;
+            [Min(1)] public int amount;
             public InventoryItem item;
         }
 
@@ -29,6 +29,8 @@ namespace RPG.Quests
         public string Title => name;
         public int ObjectiveCount => objectives.Length;
         public IEnumerable<Objective> Objectives => objectives;
+
+        public IEnumerable<Reward> Rewards => rewards;
 
         public bool HasObjective(string objectiveReference)
         {

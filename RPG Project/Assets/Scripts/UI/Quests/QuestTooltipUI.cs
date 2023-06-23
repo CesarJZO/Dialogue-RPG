@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Text;
 using RPG.Quests;
 using TMPro;
 using UnityEngine;
@@ -11,6 +11,7 @@ namespace RPG.UI.Quests
         [SerializeField] private Transform objectiveContainer;
         [SerializeField] private GameObject objectivePrefab;
         [SerializeField] private GameObject objectiveIncompletePrefab;
+        [SerializeField] private TextMeshProUGUI rewardText;
 
         public void Setup(QuestStatus status)
         {
@@ -24,7 +25,7 @@ namespace RPG.UI.Quests
 
             foreach (Quest.Objective objective in quest.Objectives)
             {
-                GameObject prefab = status.IsComplete(objective.reference)
+                GameObject prefab = status.IsObjectiveComplete(objective.reference)
                     ? objectivePrefab
                     : objectiveIncompletePrefab;
 
@@ -33,6 +34,30 @@ namespace RPG.UI.Quests
 
                 objectiveTextUI.text = objective.description;
             }
+
+            rewardText.text = GetRewardText(quest);
+        }
+
+        private string GetRewardText(Quest quest)
+        {
+            StringBuilder builder = new();
+            foreach (Quest.Reward reward in quest.Rewards)
+            {
+                if (builder.Length > 0)
+                    builder.Append(", ");
+
+                builder.Append(reward.amount > 1
+                    ? $"{reward.amount} {reward.item.GetDisplayName()}s"
+                    : reward.item.GetDisplayName()
+                );
+            }
+
+            if (builder.Length == 0)
+                builder.Append("No reward");
+
+            builder.Append(".");
+
+            return builder.ToString();
         }
     }
 }
