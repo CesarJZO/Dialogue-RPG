@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RPG.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -53,7 +54,10 @@ namespace RPG.Dialogue
         ///     Returns the children of the current node.
         /// </summary>
         /// <returns>The children of the current node</returns>
-        public IEnumerable<DialogueNode> GetChoices() => _currentDialogue.GetChildren(_currentNode);
+        public IEnumerable<DialogueNode> GetChoices()
+        {
+            return FilterOnCondition(_currentDialogue.GetChildren(_currentNode));
+        }
 
         public void SelectChoice(DialogueNode chosenNode)
         {
@@ -68,7 +72,7 @@ namespace RPG.Dialogue
         /// </summary>
         public void Next()
         {
-            int playerResponsesCount = _currentDialogue.GetPlayerChildren(_currentNode).Count();
+            int playerResponsesCount = FilterOnCondition(_currentDialogue.GetPlayerChildren(_currentNode)).Count();
             if (playerResponsesCount > 0)
             {
                 _isChoosing = true;
@@ -77,7 +81,7 @@ namespace RPG.Dialogue
                 return;
             }
 
-            List<DialogueNode> children = _currentDialogue.GetAIChildren(_currentNode).ToList();
+            List<DialogueNode> children = FilterOnCondition(_currentDialogue.GetAIChildren(_currentNode)).ToList();
             TriggerExitAction();
             _currentNode = children[Random.Range(0, children.Count)];
             TriggerEnterAction();
@@ -88,7 +92,10 @@ namespace RPG.Dialogue
         ///     Returns true if the current node has any children.
         /// </summary>
         /// <returns>Whether the current node has any children</returns>
-        public bool HasNext() => _currentDialogue.GetChildren(_currentNode).Any();
+        public bool HasNext()
+        {
+            return FilterOnCondition(_currentDialogue.GetChildren(_currentNode)).Any();
+        }
 
         private void TriggerEnterAction()
         {
@@ -114,6 +121,22 @@ namespace RPG.Dialogue
             {
                 trigger.Trigger(action);
             }
+        }
+
+        private IEnumerable<DialogueNode> FilterOnCondition(IEnumerable<DialogueNode> inputNodes)
+        {
+            foreach (DialogueNode node in inputNodes)
+            {
+                if (node.CheckCondition(GetEvaluators()))
+                {
+                    yield return node;
+                }
+            }
+        }
+
+        private IEnumerable<IPredicateEvaluator> GetEvaluators()
+        {
+            return GetComponents<IPredicateEvaluator>();
         }
     }
 }

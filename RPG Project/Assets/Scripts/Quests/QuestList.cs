@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using GameDevTV.Inventories;
 using GameDevTV.Saving;
+using RPG.Core;
 using UnityEngine;
 
 namespace RPG.Quests
 {
-    public class QuestList : MonoBehaviour, ISaveable
+    public class QuestList : MonoBehaviour, ISaveable, IPredicateEvaluator
     {
         public event Action Updated;
 
@@ -71,6 +72,11 @@ namespace RPG.Quests
                     GetComponent<ItemDropper>().DropItem(reward.item, reward.amount);
                 }
             }
+        }
+
+        public bool? Evaluate(string predicate, string[] parameters)
+        {
+            return predicate == "HasQuest" ? HasQuest(Quest.GetByName(parameters[0])) : null;
         }
     }
 }

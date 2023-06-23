@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using RPG.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,6 +17,8 @@ namespace RPG.Dialogue
         [SerializeField] private Rect rect = new(0f, 0f, 200f, 120f);
         [SerializeField] private string onEnterAction;
         [SerializeField] private string onExitAction;
+
+        [SerializeField] private Condition condition;
 
         public IEnumerable<string> Children => children.AsReadOnly();
 
@@ -86,5 +90,10 @@ namespace RPG.Dialogue
         public string OnEnterAction => onEnterAction;
 
         public string OnExitAction => onExitAction;
+
+        public bool CheckCondition(IEnumerable<IPredicateEvaluator> predicateEvaluators)
+        {
+            return condition.Check(predicateEvaluators);
+        }
     }
 }

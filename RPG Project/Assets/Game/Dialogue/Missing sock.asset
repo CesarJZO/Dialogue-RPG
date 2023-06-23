@@ -23,6 +23,9 @@ MonoBehaviour:
     height: 120
   onEnterAction: 
   onExitAction: GiveQuest
+  condition:
+    predicate: 
+    parameters: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,6 +44,62 @@ MonoBehaviour:
   - {fileID: 3332268948426100856}
   - {fileID: -2935794870623290040}
   - {fileID: 2357048589983378323}
+  - {fileID: 50027391377950446}
+  - {fileID: 1141681030745878694}
+--- !u!114 &50027391377950446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5772194d084cf4ba5fb0f9a587e3c2, type: 3}
+  m_Name: 14ebecc4-cf47-4952-808d-69962884bda5
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 1
+  text: I'm already on the case.
+  children:
+  - 73afc1c6-0804-4c0e-9d40-4e197d24abf0
+  rect:
+    serializedVersion: 2
+    x: 341
+    y: 290
+    width: 200
+    height: 120
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    predicate: HasQuest
+    parameters:
+    - Find the missing sock
+--- !u!114 &1141681030745878694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5772194d084cf4ba5fb0f9a587e3c2, type: 3}
+  m_Name: 73afc1c6-0804-4c0e-9d40-4e197d24abf0
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  text: Oops, bad memory.
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 591
+    y: 290
+    width: 200
+    height: 120
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    predicate: 
+    parameters: []
 --- !u!114 &2357048589983378323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +123,9 @@ MonoBehaviour:
     height: 120
   onEnterAction: 
   onExitAction: 
+  condition:
+    predicate: 
+    parameters: []
 --- !u!114 &3074144310799998323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +143,7 @@ MonoBehaviour:
   children:
   - 3fc5c336-2812-4c62-89ed-fc497a39f0d8
   - f19063e6-6cdf-4164-ba28-61dca41c85ae
+  - 14ebecc4-cf47-4952-808d-69962884bda5
   rect:
     serializedVersion: 2
     x: 95
@@ -89,6 +152,9 @@ MonoBehaviour:
     height: 120
   onEnterAction: 
   onExitAction: 
+  condition:
+    predicate: 
+    parameters: []
 --- !u!114 &3332268948426100856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +179,9 @@ MonoBehaviour:
     height: 120
   onEnterAction: 
   onExitAction: 
+  condition:
+    predicate: 
+    parameters: []
 --- !u!114 &8800843708344855891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,3 +206,6 @@ MonoBehaviour:
     height: 120
   onEnterAction: 
   onExitAction: 
+  condition:
+    predicate: 
+    parameters: []
