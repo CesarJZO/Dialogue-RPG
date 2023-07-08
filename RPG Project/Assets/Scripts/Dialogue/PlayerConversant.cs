@@ -9,9 +9,16 @@ namespace RPG.Dialogue
 {
     public class PlayerConversant : MonoBehaviour
     {
+        /// <summary>
+        ///     Invoked when the conversation is updated.
+        /// </summary>
         public event Action ConversationUpdated;
 
         [SerializeField] private string playerName;
+
+        /// <summary>
+        ///     Used to fetch the current conversant name and dialogue triggers.
+        /// </summary>
         [SerializeField] private AIConversant currentConversant;
 
         private Dialogue _currentDialogue;
